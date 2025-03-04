@@ -1,7 +1,4 @@
-import dataBase.ChatParticipants
-import dataBase.Chats
-import dataBase.Messages
-import dataBase.Users
+import dataBase.*
 import features.Login.configureLoginRouting
 import features.Login.configureRegistrationRouting
 import io.ktor.server.engine.embeddedServer
@@ -16,7 +13,7 @@ fun main() {
 
     // Создание таблиц
     transaction {
-        SchemaUtils.create(Users, Chats, ChatParticipants, Messages)
+        SchemaUtils.create(Users, Tokens,Chats, ChatParticipants, Messages)
     }
 
     // Запуск сервера
