@@ -1,6 +1,8 @@
 import dataBase.*
+import features.Searching.SearchingRouting
 import features.Login.configureLoginRouting
 import features.Login.configureRegistrationRouting
+import features.ServerStatus.serverStatusRouting
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
@@ -22,6 +24,8 @@ fun main() {
         configureSerialization()
         configureRegistrationRouting()
         configureLoginRouting()
+        serverStatusRouting()
+        SearchingRouting()
 
 
 

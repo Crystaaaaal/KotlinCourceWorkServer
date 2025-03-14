@@ -1,13 +1,11 @@
 package dataBase
 
+import features.Login.TokenAndPhoneRemote
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.ReferenceOption
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 object Tokens : IdTable<Int>("tokens") {
     override val id = integer("id").autoIncrement().entityId() // Уникальный идентификатор токена
@@ -20,18 +18,24 @@ object Tokens : IdTable<Int>("tokens") {
     override val primaryKey = PrimaryKey(id)
 }
 
-@Serializable
-data class Token(
-    val id: Int,
-    val userId: String,
-    val token: String
-)
+
 
 fun checkLinkUserToTokenByPhoneNumber(phoneNumber: String): Boolean {
     return transaction {
         Tokens.select { Tokens.userId eq phoneNumber }.count() > 0
     }
 }
+
+fun checkTokenByPhoneNumber(token: TokenAndPhoneRemote): Boolean {
+    return transaction {
+        // Выполняем запрос к таблице Tokens
+        Tokens.select {
+            (Tokens.userId eq token.phoneNumber) and (Tokens.token eq token.token)
+        }.count() > 0 // Если количество записей больше 0, возвращаем true
+    }
+}
+
+
 
 
 fun addLinkUserToToken(user: User, token: String) {

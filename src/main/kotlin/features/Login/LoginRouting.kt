@@ -20,7 +20,7 @@ fun Application.configureLoginRouting() {
             if (user != null) {
                 println()
                 if (!checkPassword(user.phoneNumber, receive.password)) {
-                    call.respond(HttpStatusCode.Conflict, "Неверный пароль")
+                    call.respond(HttpStatusCode.Unauthorized, "Неправильные данные")
                     println("Неверный пароль")
                     println("Запрос авторизации: конец")
                     println("==================================\n")
@@ -29,7 +29,7 @@ fun Application.configureLoginRouting() {
                 val token = UUID.randomUUID().toString()
                 println("Токен создан")
                 addLinkUserToToken(user, token)
-                call.respond(LoginResponseRemote(token = token))
+                call.respond(TokenAndPhoneRemote(receive.phoneNumber,token))
                 println("Токен отправлен")
                 println("Вход разрешён")
                 println("Запрос авторизации: конец")

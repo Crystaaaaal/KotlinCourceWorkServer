@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class RegistrationReceiveRemote(
+data class RegistrationRemote(
     val phoneNumber: String,
     val login: String,
     val password: String,

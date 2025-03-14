@@ -6,8 +6,28 @@ import java.time.format.DateTimeFormatter
 
 
 
+@Serializable
+data class ServerResponse(
+    val success: Boolean
+)
 
 
+@Serializable
+data class User(
+    val phoneNumber: String,
+    val hashPassword:String,
+    val fullName: String,
+    val login:String,
+    val profileImage: ByteArray?,
+    val createdAt: String
+)
+
+@Serializable
+data class Token(
+    val id: Int,
+    val userId: String,
+    val token: String
+)
 
 @Serializable
 data class Chat(
