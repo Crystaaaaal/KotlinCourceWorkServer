@@ -17,7 +17,7 @@ fun Application.configureRegistrationRouting() {
             val receive = call.receive<RegistrationRemote>()
             println("Запрос регистрации: старт")
             println(receive.toString())
-            if(checkUserExistsByPhoneNumber(receive)){
+            if(checkUserExistsByPhoneNumber(receive.phoneNumber)){
                 call.respond(HttpStatusCode.Conflict,"Пользователь уже зарегестрирован")
                 println("Пользователь уже зарегистрирован \nЗапрос регистрации: конец")
                 println("==================================\n")

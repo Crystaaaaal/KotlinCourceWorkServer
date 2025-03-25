@@ -3,6 +3,8 @@ import features.Searching.SearchingRouting
 import features.Login.configureLoginRouting
 import features.Login.configureRegistrationRouting
 import features.ServerStatus.serverStatusRouting
+import features.UserInfo.SendUserInfoRouting
+import features.UserInfo.UpdateUserInfoRouting
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
@@ -26,7 +28,8 @@ fun main() {
         configureLoginRouting()
         serverStatusRouting()
         SearchingRouting()
-
+        SendUserInfoRouting()
+        UpdateUserInfoRouting()
 
 
 //        routing {

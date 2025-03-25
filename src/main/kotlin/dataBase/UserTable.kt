@@ -2,11 +2,8 @@ package dataBase
 
 import features.Registration.RegistrationRemote
 import hashFunction
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.Table
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 import java.io.IOException
@@ -101,9 +98,21 @@ fun checkPassword(phoneNumber: String, inputPassword: String): Boolean {
     }
     return false
 }
-fun checkUserExistsByPhoneNumber(user: RegistrationRemote): Boolean {
+fun checkUserExistsByPhoneNumber(phoneNumber: String): Boolean {
     return transaction {
-        Users.select { Users.phoneNumber eq user.phoneNumber }.count() > 0
+        Users.select { Users.phoneNumber eq phoneNumber }.count() > 0
+    }
+}
+
+fun updateUserProfileImage(phoneNumber: String,newImage: ByteArray):Boolean {
+    return transaction {
+        if (checkUserExistsByPhoneNumber(phoneNumber)) {
+            Users.update({ Users.phoneNumber eq phoneNumber }) {
+                it[Users.profileImage] = newImage
+            }
+            return@transaction true
+        }
+        false
     }
 }
 
