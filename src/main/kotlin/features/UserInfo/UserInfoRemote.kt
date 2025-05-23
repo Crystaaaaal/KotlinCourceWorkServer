@@ -1,13 +1,13 @@
 package features.UserInfo
 
-import features.Login.TokenAndPhoneRemote
+import features.Login.TokenAndPhoneNumberRemote
 import kotlinx.serialization.Serializable
 
 
 
 @Serializable
 data class UpdateUser(
-    val loginRecive: TokenAndPhoneRemote,
+    val loginRecive: TokenAndPhoneNumberRemote,
     val activeUser:ActiveUser
 )
 @Serializable

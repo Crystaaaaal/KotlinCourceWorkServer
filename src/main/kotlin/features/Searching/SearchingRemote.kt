@@ -1,7 +1,8 @@
 package features.Searching
 
 import dataBase.User
-import features.Login.TokenAndPhoneRemote
+import features.Login.LoginReceiveRemote
+import features.Login.TokenAndPhoneNumberRemote
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -12,5 +13,5 @@ data class SearchingRemote(
 @Serializable
 data class PhoneOrLoginRemote(
     val phoneOrLogin: String,
-    val token: TokenAndPhoneRemote
+    val token: TokenAndPhoneNumberRemote
 )

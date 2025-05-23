@@ -1,6 +1,7 @@
 package features.Login
 import dataBase.addLinkUserToToken
 import dataBase.checkPassword
+import dataBase.ensureChatExists
 import dataBase.getUserByPhoneNumber
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -29,7 +30,9 @@ fun Application.configureLoginRouting() {
                 val token = UUID.randomUUID().toString()
                 println("Токен создан")
                 addLinkUserToToken(user, token)
-                call.respond(TokenAndPhoneRemote(receive.phoneNumber,token))
+                call.respond(TokenAndUserRemote(user,token))
+                println(user.toString())
+                ensureChatExists(user.phoneNumber,user.phoneNumber)
                 println("Токен отправлен")
                 println("Вход разрешён")
                 println("Запрос авторизации: конец")

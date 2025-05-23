@@ -1,5 +1,6 @@
 package features.Login
 
+import dataBase.User
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -9,8 +10,13 @@ data class LoginReceiveRemote(
 )
 
 @Serializable
-data class TokenAndPhoneRemote(
+data class TokenAndPhoneNumberRemote(
     val phoneNumber: String,
     val token: String
 )
 
+@Serializable
+data class TokenAndUserRemote(
+    val user: User,
+    val token: String
+)

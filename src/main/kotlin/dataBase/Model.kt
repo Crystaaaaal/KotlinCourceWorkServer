@@ -20,7 +20,15 @@ data class User(
     val login:String,
     val profileImage: ByteArray?,
     val createdAt: String
-)
+) {
+    override fun toString(): String {
+        return "phoneNumber: $phoneNumber" +
+                "hashPassword: $hashPassword" +
+                "fullName: $fullName" +
+                "login: $login" +
+                "createdAt: $createdAt"
+    }
+}
 
 @Serializable
 data class Token(
@@ -31,26 +39,13 @@ data class Token(
 
 @Serializable
 data class Chat(
-    val id: Int,
-    val createdAt: String
-) {
-    fun createdAtDateTime(): LocalDateTime {
-        return LocalDateTime.parse(createdAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-    }
-}
-
-@Serializable
-data class Message(
-    val id: Int,
     val chatId: Int,
-    val senderId: Int,
-    val messageText: String,
-    val sentAt: String
-) {
-    fun sentAtDateTime(): LocalDateTime {
-        return LocalDateTime.parse(sentAt, DateTimeFormatter.ISO_LOCAL_DATE_TIME)
-    }
-}
+    val userPhone: String,
+    val contactPhone: String,
+    val createdAt: String
+)
+
+
 
 @Serializable
 data class UserRegistrationRequest(

@@ -59,19 +59,21 @@ fun getUsersByLogin(login: String): List<User> {
     }
 }
 
-fun getUsersByPhoneNumber(phoneNumber: String): List<User> {
+fun getUsersByPhoneNumber(phones: List<String>): List<User> {
     return transaction {
-        Users.select { Users.phoneNumber like "%$phoneNumber%" } // Поиск по частичному совпадению
-            .map { row ->
-                User(
-                    phoneNumber = row[Users.phoneNumber],
-                    hashPassword = "",
-                    fullName = row[Users.fullName],
-                    login = row[Users.login],
-                    profileImage =row[Users.profileImage],
-                    createdAt = row[Users.createdAt]
-                )
-            }
+        phones.flatMap { phone ->
+            Users.select { Users.phoneNumber eq phone } // Используем точное совпадение вместо like
+                .map { row ->
+                    User(
+                        phoneNumber = row[Users.phoneNumber],
+                        hashPassword = "", // Обратите внимание: вы всегда используете пустой пароль
+                        fullName = row[Users.fullName],
+                        login = row[Users.login],
+                        profileImage = row[Users.profileImage],
+                        createdAt = row[Users.createdAt]
+                    )
+                }
+        }
     }
 }
 
@@ -82,7 +84,7 @@ fun getUserByPhoneNumber(phoneNumber: String): User? {
             ?.let { row ->
                 User(
                     phoneNumber = row[Users.phoneNumber],
-                    hashPassword = row[Users.hashPassword],
+                    hashPassword = "",
                     fullName = row[Users.fullName],
                     login = row[Users.login],
                     profileImage = row[Users.profileImage],
@@ -91,6 +93,24 @@ fun getUserByPhoneNumber(phoneNumber: String): User? {
             }
     }
 }
+
+fun getUserByPhoneNumberWithOutImage(phoneNumber: String): User? {
+    return transaction {
+        Users.select { Users.phoneNumber eq phoneNumber }
+            .singleOrNull()
+            ?.let { row ->
+                User(
+                    phoneNumber = row[Users.phoneNumber],
+                    hashPassword = "",
+                    fullName = row[Users.fullName],
+                    login = row[Users.login],
+                    profileImage = null,
+                    createdAt = row[Users.createdAt]
+                )
+            }
+    }
+}
+
 fun checkPassword(phoneNumber: String, inputPassword: String): Boolean {
     val hashedPasswordFromDB = getHashedPasswordFromDB(phoneNumber)
     if (hashedPasswordFromDB == hashFunction(inputPassword)) {
@@ -116,12 +136,7 @@ fun updateUserProfileImage(phoneNumber: String,newImage: ByteArray):Boolean {
     }
 }
 
-fun deliteUserByPhoneNumber(phoneNumber: String): Boolean {
-    return transaction {
-        val deletedRows = Users.deleteWhere { Users.phoneNumber eq phoneNumber }
-        deletedRows > 0
-    }
-}
+
 
 fun imageToByteArray(): ByteArray? {
     return try {

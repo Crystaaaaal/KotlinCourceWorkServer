@@ -1,7 +1,6 @@
 package dataBase
 
-import features.Login.TokenAndPhoneRemote
-import kotlinx.serialization.Serializable
+import features.Login.TokenAndPhoneNumberRemote
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
@@ -26,7 +25,7 @@ fun checkLinkUserToTokenByPhoneNumber(phoneNumber: String): Boolean {
     }
 }
 
-fun checkTokenByPhoneNumber(token: TokenAndPhoneRemote): Boolean {
+fun checkTokenByPhoneNumber(token: TokenAndPhoneNumberRemote): Boolean {
     return transaction {
         // Выполняем запрос к таблице Tokens
         Tokens.select {
@@ -50,5 +49,12 @@ fun addLinkUserToToken(user: User, token: String) {
                 it[Tokens.token] = token
             }
         }
+    }
+}
+
+fun deleteTokenByPhoneNumber(phoneNumber: String): Boolean {
+    return transaction {
+        // Удаляем запись и возвращаем true, если была удалена хотя бы одна запись
+        Tokens.deleteWhere { userId eq phoneNumber } > 0
     }
 }

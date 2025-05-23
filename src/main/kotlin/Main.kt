@@ -1,10 +1,14 @@
 import dataBase.*
+import features.Chats.configureChatsRouting
 import features.Searching.SearchingRouting
 import features.Login.configureLoginRouting
 import features.Login.configureRegistrationRouting
+import features.Messages.configureMessagesRouting
+import features.Quit.configureQuitRouting
 import features.ServerStatus.serverStatusRouting
 import features.UserInfo.SendUserInfoRouting
 import features.UserInfo.UpdateUserInfoRouting
+import features.webSocket.configureWebSockets
 import io.ktor.server.engine.embeddedServer
 import io.ktor.server.netty.Netty
 import org.jetbrains.exposed.sql.Database
@@ -17,7 +21,7 @@ fun main() {
 
     // Создание таблиц
     transaction {
-        SchemaUtils.create(Users, Tokens,Chats, ChatParticipants, Messages)
+        SchemaUtils.create(Users, Tokens,Messages,Chats)
     }
 
     // Запуск сервера
@@ -30,11 +34,10 @@ fun main() {
         SearchingRouting()
         SendUserInfoRouting()
         UpdateUserInfoRouting()
+        configureWebSockets()
+        configureMessagesRouting()
+        configureChatsRouting()
+        configureQuitRouting()
 
-
-//        routing {
-//            userRoutes()
-//            chatRoutes()
-//        }
     }.start(wait = true)
 }

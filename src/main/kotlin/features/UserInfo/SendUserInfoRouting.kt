@@ -1,10 +1,8 @@
 package features.UserInfo
 
-import dataBase.ServerResponse
 import dataBase.checkTokenByPhoneNumber
 import dataBase.getUserByPhoneNumber
-import features.Login.TokenAndPhoneRemote
-import features.Searching.PhoneOrLoginRemote
+import features.Login.TokenAndPhoneNumberRemote
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -16,7 +14,7 @@ fun Application.SendUserInfoRouting(){
         post("/sendUserInfo") {
             println("\n==================================")
             println("Запрос выдачи информации о пользователе: начало")
-            val receive = call.receive<TokenAndPhoneRemote>()
+            val receive = call.receive<TokenAndPhoneNumberRemote>()
 
             if (!checkTokenByPhoneNumber(receive)) {
                 call.respond(HttpStatusCode.Conflict, "Неверный токен")
